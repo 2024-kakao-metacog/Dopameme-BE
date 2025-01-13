@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <a href="https://nestjs.com/" target="blank"><img src="https://github.com/user-attachments/assets/e2fbbfe8-7cd9-4f3f-8ab4-bb5d7e4047ff" width="240" alt="Dopameme Logo" /></a>
 </p>
 
 <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
@@ -21,7 +21,7 @@
 
 ## 설명
 
-Web Application Server와 데이터베이스를 연동한 프로젝트의 보일러 플레이트입니다.
+도파밈 프로젝트의 WAS입니다
 
 [Nest](https://github.com/nestjs/nest) 프레임워크에 Prisma(ORM)가 적용되어있습니다.
 

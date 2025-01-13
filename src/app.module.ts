@@ -8,6 +8,8 @@ import corsConfig from './config/cors.config';
 import { validate } from './config/env/validate';
 import { resolve } from 'path';
 import { DatabaseService } from './database.service';
+import { VideoModule } from './video/video.module';
+import { VideoStreamModule } from './videostream/videostream.module';
 
 // __dirname is src/
 const envFilePath = resolve(
@@ -25,6 +27,8 @@ const envFilePath = resolve(
       load: [appConfig, databaseConfig, corsConfig],
       validate: validate,
     }), // https://docs.nestjs.com/techniques/configuration
+    VideoModule,
+    VideoStreamModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseService],

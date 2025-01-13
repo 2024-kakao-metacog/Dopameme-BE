@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from './config/app.config';
 import { DatabaseConfig } from './config/database.config';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +26,16 @@ async function bootstrap() {
   console.log('App Config: ', appConfig);
   console.log('Database Config: ', databaseConfig);
   console.log('CORS Config: ', corsConfig);
+
+  const config = new DocumentBuilder()
+    .setTitle('Dopameme API Docs')
+    .setDescription('Dopameme API description')
+    .setVersion('1.0.0')
+    .addTag('shortform')
+    .build();
+
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
 
   await app.listen(appConfig.port, appConfig.host, () => {
     console.log(
