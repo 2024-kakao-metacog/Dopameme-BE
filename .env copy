@@ -1,0 +1,7 @@
+# Docker Environment Variables
+# MODE must be dev, stage, prod
+MODE = prod
+
+# Docker Compose Config
+EXTERNAL_PORT_HTTP=3000
+INTERNAL_PORT_HTTP=3000 # !Check App Port at src/config/env!

@@ -1,0 +1,15 @@
+services:
+  was-nest-init:
+    build: .
+    image: was-nest-init
+    container_name: was-nest-init
+    env_file:
+      - .env
+    ports:
+      - ${EXTERNAL_PORT_HTTP}:${INTERNAL_PORT_HTTP}
+    networks:
+      - threedotnet
+
+networks:
+  threedotnet:
+    external: true
