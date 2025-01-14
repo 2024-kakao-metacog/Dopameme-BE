@@ -61,3 +61,6 @@ schema.prisma
 
 # Videos
 videofile
+
+# Dummydata
+dummydata
