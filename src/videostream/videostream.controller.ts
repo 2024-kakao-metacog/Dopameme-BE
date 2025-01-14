@@ -26,7 +26,7 @@ export class VideostreamController {
       throw new BadRequestException('Manifest is required');
     }
 
-    const manifestFile = `${manifest}`;
+    const manifestFile = `${manifest}-manifest.mpd`;
     const stream = await this.videostreamService.getVideoStream(manifestFile);
     return new StreamableFile(stream, {
       type: 'application/dash+xml',
