@@ -23,7 +23,9 @@ export class VideoService {
   constructor() {}
 
   getVideoMetadatasDummy(maxResults: number = 5): VideoMetadata[] {
-    const sampleData = MyFileSystem.loadJson(join(this.dummydataDir, 'VideoMetadataList.json')) as VideoMetadata[];
+    const sampleData = MyFileSystem.loadJson(
+      join(this.dummydataDir, 'VideoMetadataList.json'),
+    ) as VideoMetadata[];
     const results = maxResults ? sampleData.slice(0, maxResults) : sampleData;
     return results;
   }
