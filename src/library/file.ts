@@ -14,7 +14,7 @@ export class MyFileSystem {
     return statAsync(resolve(process.cwd(), fileName));
   }
 
-    // To Do: Remove Dependency on process.cwd()
+  // To Do: Remove Dependency on process.cwd()
   static saveFileStream(fileName: string, stream: NodeJS.ReadableStream) {
     const filePath = resolve(process.cwd(), fileName);
     const writable = createWriteStream(filePath);
