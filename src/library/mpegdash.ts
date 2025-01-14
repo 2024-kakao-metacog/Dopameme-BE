@@ -1,18 +1,12 @@
-import ffmpeg from 'fluent-ffmpeg';
+import Ffmpeg from 'fluent-ffmpeg';
 import { basename, join } from 'path';
-
-// const FfmpegPath = '/opt/homebrew/bin/ffmpeg';
-// const ffmpeg = Ffmpeg(FfmpegPath);
-// ffmpeg.setFfmpegPath(FfmpegPath);
 
 export class MpegDash {
   static async createDash(inputFilePath: string, outputDir: string) {
     const inputFile = basename(inputFilePath);
     const outputManifestPath = join(outputDir, `${inputFile}-manifest.mpd`);
-    console.log('input:', inputFile);
-    console.log('path:', outputDir);
 
-    const command = ffmpeg();
+    const command = Ffmpeg();
     command
       .addInput(inputFilePath)
       .addOutput(outputManifestPath)
