@@ -1,5 +1,7 @@
 FROM node:22.12
 
+RUN apt-get update && apt-get install -y ffmpeg
+
 # Create app directory
 RUN mkdir -p /app
 WORKDIR /app
