@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { join, resolve } from 'path';
+import { MyFileSystem } from '../library/file';
 
 export interface VideoMetadata {
   snippet: {
@@ -16,27 +18,13 @@ export interface VideoMetadata {
 
 @Injectable()
 export class VideoService {
+  readonly dummydataDir = resolve(process.cwd(), 'dummydata');
+
   constructor() {}
 
   getVideoMetadatasDummy(maxResults: number = 5): VideoMetadata[] {
-    const sampleData: VideoMetadata[] = [
-      {
-        snippet: {
-          videoId: 'sundaymorning',
-          title: 'there is only one sun',
-          thumbnailUrl:
-            'https://i.ytimg.com/vi/hObAvaxlQ7o/hq720_2.jpg?sqp=-oaymwFBCNAFEJQDSFryq4qpAzMIARUAAIhCGADYAQHiAQoIGBACGAY4AUAB8AEB-AHeBIACuAiKAgwIABABGGUgWyhIMA8=&rs=AOn4CLDJNWWB1GEO3pC6oXAhcW9acVIxYA',
-          publishedAt: '2024-01-06',
-          userId: '@sunrise',
-          userNickname: '선쩔tv',
-          isOwner: true,
-          isSubscribed: true,
-          canSubscribe: true,
-        },
-      },
-    ];
+    const sampleData = MyFileSystem.loadJson(join(this.dummydataDir, 'VideoMetadataList.json')) as VideoMetadata[];
     const results = maxResults ? sampleData.slice(0, maxResults) : sampleData;
-
     return results;
   }
 }

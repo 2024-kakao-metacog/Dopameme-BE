@@ -1,4 +1,4 @@
-import { createReadStream, createWriteStream, stat } from 'fs';
+import { createReadStream, createWriteStream, stat, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { promisify } from 'util';
 
@@ -9,10 +9,12 @@ export class MyFileSystem {
     return createReadStream(filePath);
   }
 
+  // To Do: Remove Dependency on process.cwd()
   static async getFileStat(fileName: string) {
     return statAsync(resolve(process.cwd(), fileName));
   }
 
+    // To Do: Remove Dependency on process.cwd()
   static saveFileStream(fileName: string, stream: NodeJS.ReadableStream) {
     const filePath = resolve(process.cwd(), fileName);
     const writable = createWriteStream(filePath);
@@ -22,5 +24,10 @@ export class MyFileSystem {
       writable.on('finish', () => resolve());
       writable.on('error', (err) => reject(err));
     });
+  }
+
+  static loadJson(filePath: string) {
+    const fileData = readFileSync(filePath, 'utf8');
+    return JSON.parse(fileData);
   }
 }
