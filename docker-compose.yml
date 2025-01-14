@@ -9,6 +9,7 @@ services:
       - ${EXTERNAL_PORT_HTTP}:${INTERNAL_PORT_HTTP}
     volumes:
       - ./videofile:/app/videofile
+      - ./dummydata:/app/dummydata
     networks:
       - threedotnet
 
