@@ -1,8 +1,8 @@
 services:
-  was-nest-init:
+  dopameme-be:
     build: .
-    image: was-nest-init
-    container_name: was-nest-init
+    image: dopameme-be
+    container_name: dopameme-be
     env_file:
       - .env
     ports:
