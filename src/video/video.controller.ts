@@ -6,7 +6,7 @@ import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}
 
-  @Get('/metadatas')
+  @Get('/metadata/list')
   @ApiOperation({ summary: '동영상 메타데이터 조회' })
   @ApiQuery({
     name: 'maxResults',
