@@ -1,23 +1,10 @@
 import { plainToClass } from 'class-transformer';
-import {
-  IsEnum,
-  IsNumber,
-  IsString,
-  Max,
-  Min,
-  validateSync,
-} from 'class-validator';
-
-enum Environment {
-  development = 'development',
-  stage = 'stage',
-  production = 'production',
-}
+import { IsNumber, IsString, Max, Min, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   // App Config
-  @IsEnum(Environment)
-  APP_MODE: Environment;
+  @IsString()
+  APP_MODE: string;
 
   @IsString()
   APP_HOST: string;
