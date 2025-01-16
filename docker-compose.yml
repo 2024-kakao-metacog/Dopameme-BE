@@ -1,15 +1,16 @@
 services:
   dopameme-be:
     build: .
-    image: dopameme-be
-    container_name: dopameme-be
+    image: skynet3285/dopameme-be
     env_file:
       - .env
+    container_name: dopameme-be
     ports:
       - ${EXTERNAL_PORT_HTTP}:${INTERNAL_PORT_HTTP}
     volumes:
       - ./videofile:/app/videofile
       - ./dummydata:/app/dummydata
+      - ./env:/app/env
     networks:
       - threedotnet
 

@@ -29,7 +29,9 @@
 
 ## 프로젝트 셋업
 
-`src/config/env` 에서 development, stage, production 모드 환경에 맞는 env를 작성하세요.
+`env` 에서 development, stage, production 모드 환경에 맞는 env를 작성하세요.
+
+`.env copy`를 참고하여 `.env`를 작성하세요.
 
 `prisma/schema copy.prisma` 로 `prisma/schema.prisma` 를 작성하세요
 
