@@ -1,6 +1,6 @@
 # Docker Environment Variables
 # MODE must be dev, stage, prod
-MODE = prod
+MODE=prod
 
 # Docker Compose Config
 EXTERNAL_PORT_HTTP=3000

@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import corsConfig from './config/cors.config';
-import { validate } from './config/env/validate';
+import { validate } from './config/validate';
 import { resolve } from 'path';
 import { DatabaseService } from './database.service';
 import { VideoModule } from './video/video.module';
@@ -14,7 +14,7 @@ import { VideoStreamModule } from './videostream/videostream.module';
 // __dirname is src/
 const envFilePath = resolve(
   __dirname,
-  'config',
+  '..',
   'env',
   `.env.${process.env.APP_MODE}.local`,
 );
