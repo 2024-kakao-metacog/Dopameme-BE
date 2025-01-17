@@ -23,7 +23,7 @@ export class AppService {
   }
 
   getWelcomeMessage(): string {
-    return `🎉 Welcome to threedot's Service! With CICD 🎉 <br>
+    return `🎉 Welcome to Dopameme's Service With CICD !!! 🎉 <br>
     Start here → ${this.entrypoint}`;
   }
 }
