@@ -1,7 +1,7 @@
 services:
   dopameme-be:
     build: .
-    image: skynet3285/dopameme-be
+    image: skynet3285/dopameme-be:latest
     env_file:
       - .env
     container_name: dopameme-be

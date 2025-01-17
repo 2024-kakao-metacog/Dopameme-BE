@@ -57,10 +57,13 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .env
 
 # Prisma
-schema.prisma
+# schema.prisma
 
 # Videos
 videofile
 
 # Dummydata
 dummydata
+
+# Github Actions Debug
+.secrets
