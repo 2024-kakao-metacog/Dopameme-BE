@@ -33,7 +33,7 @@
 
 `.env copy`를 참고하여 `.env`를 작성하세요.
 
-`prisma/schema copy.prisma` 로 `prisma/schema.prisma` 를 작성하세요
+`prisma/schema.prisma` 를 작성하세요
 
 ## 프로젝트 빌드
 
@@ -63,6 +63,12 @@ $ yarn start:watch-prod
 $ yarn start:prod-dev
 $ yarn start:prod-stage
 $ yarn start:prod-prod
+```
+
+## 깃허브 액션 디버그
+
+```bash
+$ act --container-architecture linux/amd64 --secret-file .github/.secrets
 ```
 
 ## 테스트
