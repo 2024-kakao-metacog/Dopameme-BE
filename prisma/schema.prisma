@@ -10,7 +10,7 @@ generator client {
 
 // Define at src/database.service.ts
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = ""
 }
 //////////////////// Do not edit the above part ////////////////////
@@ -26,3 +26,49 @@ datasource db {
 //   createdAt DateTime @default(now())
 // }
 
+model User {
+  id           Int      @id @default(autoincrement())
+  userId       String   @unique @map("user_id") @db.VarChar(16)
+  passwordHash String   @map("password_hash") @db.Char(64)
+  nickname     String   @unique @db.VarChar(16)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  videos       Video[]
+  notifications Notification[]
+  following  Follow[] @relation("Following")
+  followed   Follow[] @relation("Followers")
+}
+
+model Video {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  title         String   @db.VarChar(100)
+  videoUrl      String   @map("video_url") @db.VarChar(256)
+  thumbnailUrl  String   @map("thumbnail_url") @db.VarChar(256)
+  isCrawl       Boolean  @map("is_crawl")
+  publishedAt   DateTime @default(now()) @map("published_at")
+
+  user          User     @relation(fields: [userId], references: [id])
+  notifications Notification[]
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  videoId   Int      @map("video_id")
+  isRead    Boolean  @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id])
+  video     Video    @relation(fields: [videoId], references: [id])
+}
+
+model Follow {
+  id              Int      @id @default(autoincrement())
+  followingUserId Int      @map("following_user_id")
+  followedUserId  Int      @map("followed_user_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  following       User     @relation("Following", fields: [followingUserId], references: [id])
+  followed        User     @relation("Followers", fields: [followedUserId], references: [id])
+}
