@@ -11,7 +11,7 @@ export class DatabaseService
 {
   constructor(private configService: ConfigService) {
     const databaseConfig = configService.get<DatabaseConfig>('database');
-    const url = `mysql://${encodeURIComponent(databaseConfig.username)}:${encodeURIComponent(databaseConfig.password)}@${encodeURIComponent(databaseConfig.host)}:${databaseConfig.port}/${encodeURIComponent(databaseConfig.database)}`;
+    const url = `postgresql://${encodeURIComponent(databaseConfig.username)}:${encodeURIComponent(databaseConfig.password)}@${encodeURIComponent(databaseConfig.host)}:${databaseConfig.port}/${encodeURIComponent(databaseConfig.database)}`;
 
     super({
       datasources: {
