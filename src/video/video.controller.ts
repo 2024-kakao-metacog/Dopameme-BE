@@ -1,24 +1,38 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { VideoMetadata, VideoService } from './video.service';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
+import { VideoService } from './video.service';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FindVideoMetadataListDto } from './dto/find-video-metadata-list.dto';
+import { VideoMetadataListResponseDto } from './dto/video-metadata-list-response.dto';
+import { valid } from 'src/library/class-validate';
 
+@ApiTags('Video')
 @Controller('video')
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}
 
   @Get('/metadata/list')
-  @ApiOperation({ summary: '동영상 메타데이터 조회' })
+  @ApiOperation({ summary: 'Retrieve Video Metadata' })
   @ApiQuery({
     name: 'maxResults',
     required: false,
-    description: '가져올 최대 결과 수',
-    example: 5,
+    description: 'The maximum number of results to retrieve, default is 4',
+    example: 4,
+    type: Number,
   })
-  @ApiResponse({ status: 200, description: '성공적으로 메타데이터를 반환함.' })
-  @ApiResponse({ status: 400, description: '잘못된 요청 형식.' })
-  getVideoMetadatas(
-    @Query('maxResults') maxResults: number = 5,
-  ): VideoMetadata[] {
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully returned video metadata',
+    type: VideoMetadataListResponseDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request format.',
+  })
+  async getVideoMetadatas(
+    @Query('maxResults')
+    maxResults: number = 4,
+  ) {
+    await valid(FindVideoMetadataListDto, { maxResults });
     return this.videoService.getVideoMetadatasDummy(maxResults);
   }
 }
