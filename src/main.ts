@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfig } from './config/app.config';
 import { DatabaseConfig } from './config/database.config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,13 +30,14 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Dopameme API Docs')
-    .setDescription('Dopameme API description')
+    .setDescription('Video Platform API Docs')
     .setVersion('1.0.0')
-    .addTag('shortform')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.listen(appConfig.port, appConfig.host, () => {
     console.log(

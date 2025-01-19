@@ -3,7 +3,6 @@ import { VideostreamService } from './videostream.service';
 import { VideostreamController } from './videostream.controller';
 
 @Module({
-  imports: [],
   controllers: [VideostreamController],
   providers: [VideostreamService],
 })
