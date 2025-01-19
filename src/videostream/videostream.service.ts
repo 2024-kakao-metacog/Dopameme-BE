@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ReadStream } from 'fs';
 import { join, resolve } from 'path';
-import { MyFileSystem } from 'src/library/file';
-import { MpegDash } from 'src/library/mpegdash';
+import { MyFileSystem } from '../library/file';
+import { MpegDash } from '../library/mpegdash';
 
 @Injectable()
 export class VideostreamService {

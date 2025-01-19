@@ -10,6 +10,9 @@ import { resolve } from 'path';
 import { DatabaseService } from './database.service';
 import { VideoModule } from './video/video.module';
 import { VideoStreamModule } from './videostream/videostream.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import jwtConfig from './config/jwt.config';
 
 // __dirname is src/
 const envFilePath = resolve(
@@ -24,11 +27,13 @@ const envFilePath = resolve(
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: envFilePath,
-      load: [appConfig, databaseConfig, corsConfig],
+      load: [appConfig, databaseConfig, corsConfig, jwtConfig],
       validate: validate,
     }), // https://docs.nestjs.com/techniques/configuration
     VideoModule,
     VideoStreamModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseService],

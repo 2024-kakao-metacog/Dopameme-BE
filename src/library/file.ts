@@ -30,4 +30,8 @@ export class MyFileSystem {
     const fileData = readFileSync(filePath, 'utf8');
     return JSON.parse(fileData);
   }
+
+  static readFile(filePath: string) {
+    return readFileSync(filePath);
+  }
 }

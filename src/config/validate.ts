@@ -47,6 +47,22 @@ class EnvironmentVariables {
 
   @IsString()
   CORS_CREDENTIALS: string;
+
+  // JWT Config
+  @IsString()
+  JWT_PRIVATE_KEY: string;
+
+  @IsString()
+  JWT_PUBLIC_KEY: string;
+
+  @IsString()
+  JWT_ALGORITHM: string;
+
+  @IsString()
+  JWT_ACCESS_TOKEN_EXP: string;
+
+  @IsString()
+  JWT_REFRESH_TOKEN_EXP: string;
 }
 
 export function validate(config: Record<string, unknown>) {
