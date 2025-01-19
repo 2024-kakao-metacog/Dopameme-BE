@@ -1,20 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { join, resolve } from 'path';
 import { MyFileSystem } from '../library/file';
-
-export interface VideoMetadata {
-  snippet: {
-    videoId: string;
-    title: string;
-    thumbnailUrl: string;
-    publishedAt: string;
-    userId: string;
-    userNickname: string;
-    isOwner: boolean;
-    isSubscribed: boolean;
-    canSubscribe: boolean;
-  };
-}
+import { VideoMetadataListResponseDto } from './dto/video-metadata-list-response.dto';
 
 @Injectable()
 export class VideoService {
@@ -22,11 +9,11 @@ export class VideoService {
 
   constructor() {}
 
-  getVideoMetadatasDummy(maxResults: number = 5): VideoMetadata[] {
+  getVideoMetadatasDummy(maxResults: number): VideoMetadataListResponseDto[] {
     const sampleData = MyFileSystem.loadJson(
       join(this.dummydataDir, 'VideoMetadataList.json'),
-    ) as VideoMetadata[];
-    const results = maxResults ? sampleData.slice(0, maxResults) : sampleData;
+    ) as VideoMetadataListResponseDto[];
+    const results = sampleData.slice(0, maxResults);
     return results;
   }
 }

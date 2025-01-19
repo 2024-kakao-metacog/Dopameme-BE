@@ -28,10 +28,10 @@ datasource db {
 
 model User {
   id           Int      @id @default(autoincrement())
-  userId       String   @unique @map("user_id") @db.VarChar(16)
+  userId       String   @map("user_id") @unique @db.VarChar(16)
   passwordHash String   @map("password_hash") @db.Char(64)
   nickname     String   @unique @db.VarChar(16)
-  createdAt    DateTime @default(now()) @map("created_at")
+  createdAt    DateTime @map("created_at")
 
   videos       Video[]
   notifications Notification[]
@@ -41,12 +41,12 @@ model User {
 
 model Video {
   id            Int      @id @default(autoincrement())
-  userId        Int      @map("user_id")
+  userId        Int      @map("user_id") @unique
   title         String   @db.VarChar(100)
   videoUrl      String   @map("video_url") @db.VarChar(256)
   thumbnailUrl  String   @map("thumbnail_url") @db.VarChar(256)
   isCrawl       Boolean  @map("is_crawl")
-  publishedAt   DateTime @default(now()) @map("published_at")
+  publishedAt   DateTime @map("published_at")
 
   user          User     @relation(fields: [userId], references: [id])
   notifications Notification[]
@@ -54,10 +54,10 @@ model Video {
 
 model Notification {
   id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  videoId   Int      @map("video_id")
+  userId    Int      @map("user_id") @unique
+  videoId   Int      @map("video_id") @unique
   isRead    Boolean  @map("is_read")
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @map("created_at")
 
   user      User     @relation(fields: [userId], references: [id])
   video     Video    @relation(fields: [videoId], references: [id])
@@ -65,8 +65,8 @@ model Notification {
 
 model Follow {
   id              Int      @id @default(autoincrement())
-  followingUserId Int      @map("following_user_id")
-  followedUserId  Int      @map("followed_user_id")
+  followingUserId Int      @map("following_user_id") @unique
+  followedUserId  Int      @map("followed_user_id") @unique
   createdAt       DateTime @default(now()) @map("created_at")
 
   following       User     @relation("Following", fields: [followingUserId], references: [id])
