@@ -3,7 +3,7 @@ import { VideoService } from './video.service';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindVideoMetadataListDto } from './dto/find-video-metadata-list.dto';
 import { VideoMetadataListResponseDto } from './dto/video-metadata-list-response.dto';
-import { valid } from 'src/library/class-validate';
+import { valid } from '../library/class-validate';
 
 @ApiTags('Video')
 @Controller('video')
