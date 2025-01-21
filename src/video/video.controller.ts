@@ -17,6 +17,7 @@ import {
 } from './dto/video-metadata-response.dto';
 import { valid } from '../library/class-validate';
 import { UserService } from '../user/user.service';
+import { FindUserDto } from '../user/dto/find-user.dto';
 
 @ApiTags('Video')
 @Controller('video')
@@ -27,6 +28,56 @@ export class VideoController {
   ) {}
 
   @Get('/metadata/list')
+  @ApiOperation({ summary: 'Retrieve User Video Metadata List' })
+  @ApiQuery({
+    name: 'userId',
+    required: true,
+    description: 'The unique identifier of the user',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully returned video metadata',
+    type: VideoMetadataListResponseDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request format.',
+  })
+  async getVideoMetadataList(
+    @Query('userId')
+    userId: string,
+  ): Promise<VideoMetadataListResponseDto> {
+    await valid(FindUserDto, { userId });
+    const user = await this.userService.findUserByUserId(userId);
+
+    if (user === null) {
+      throw new NotFoundException('User not found');
+    }
+
+    const metadataList = await this.videoService.findVideoByUserId(user.id);
+
+    // To Do: Implement auth user check
+
+    const snippet = metadataList.map((metadata) => {
+      return {
+        title: metadata.title,
+        videoUrl: metadata.videoUrl,
+        thumbnailUrl: metadata.thumbnailUrl,
+        publishedAt: metadata.publishedAt,
+        userId: user.userId,
+        userNickname: user.nickname,
+        isOwner: false,
+        isSubscribed: false,
+        canSubscribe: false,
+      };
+    });
+
+    return {
+      snippet: snippet,
+    };
+  }
+
+  @Get('/metadata/list/random')
   @ApiOperation({ summary: 'Retrieve Random Video Metadata List' })
   @ApiQuery({
     name: 'maxResults',
@@ -49,6 +100,7 @@ export class VideoController {
     maxResults: number = 4,
   ): Promise<VideoMetadataListResponseDto> {
     await valid(FindVideoMetadataListDto, { maxResults });
+
     const metadataList =
       await this.videoService.getVideoMetadataListRandom(maxResults);
 
