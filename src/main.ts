@@ -6,6 +6,7 @@ import { DatabaseConfig } from './config/database.config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { CorsConfig } from './config/cors.config';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,8 @@ async function bootstrap() {
   const appConfig = configService.get<AppConfig>('app');
   const databaseConfig = configService.get<DatabaseConfig>('database');
   const corsConfig = configService.get<CorsConfig>('cors');
+
+  app.use(cookieParser());
 
   app.setGlobalPrefix(appConfig.entrypoint);
 
