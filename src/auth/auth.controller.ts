@@ -21,6 +21,7 @@ import {
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import { JwtAccessTokenGuard } from './guard/access-token.guard';
 import { JwtRefreshTokenGuard } from './guard/refresh-token.guard';
+import { Cookies } from './decorator/cookies.decorator';
 import { Response } from 'express';
 
 @ApiTags('Auth')
@@ -87,19 +88,18 @@ export class AuthController {
     type: String,
   })
   async refreshToken(
-    @Body() refreshToken: string,
-    @Res({ passthrough: true }) res: Response,
+    @Cookies('refresh_token') refreshToken: string,
+    @Res({ passthrough: true })
+    res: Response,
   ) {
     const newAccessToken =
       await this.authService.refreshAccessToken(refreshToken);
     const newRefreshToken =
-      await this.authService.refreshRefreshToken(newAccessToken);
+      await this.authService.refreshRefreshToken(refreshToken);
 
     if (newAccessToken === null || newRefreshToken === null) {
       throw new UnauthorizedException('Invalid User');
     }
-
-    res.setHeader('Authorization', 'Bearer ' + newAccessToken);
 
     res.cookie('access_token', newAccessToken, {
       httpOnly: true,
