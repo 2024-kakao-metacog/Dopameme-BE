@@ -26,4 +26,9 @@ export class VideostreamService {
   getVideoStat(filename: string) {
     return FileUtil.getFileStat(join(this.outputDir, filename));
   }
+
+  isExistVideoChunk(chunkpath: string): boolean {
+    const filepath = join(this.outputDir, chunkpath);
+    return FileUtil.isExist(filepath);
+  }
 }
