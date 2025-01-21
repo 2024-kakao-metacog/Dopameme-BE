@@ -3,53 +3,62 @@ import {
   Controller,
   Get,
   Param,
-  Query,
   StreamableFile,
 } from '@nestjs/common';
 import { VideostreamService } from './videostream.service';
+import { ApiOperation, ApiParam } from '@nestjs/swagger';
+import { join } from 'path';
+import { valid } from '../library/class-validate';
+import { VideoChunkDto, VideonameDto } from './dto/request-video.dto';
+import { FileUtil } from '../library/file';
 
 @Controller('videostream')
 export class VideostreamController {
   constructor(private readonly videostreamService: VideostreamService) {}
 
-  @Get('encode')
-  async encode(
-    @Query('filename')
-    filename: string,
+  // To Do: Upload video file
+  //
+  // @Get('encode')
+  // async encode(
+  //   @Query('filename')
+  //   filename: string,
+  // ) {
+  //   await this.videostreamService.encodeVideoStream(filename);
+  // }
+
+  @Get(':videoname/:chunk')
+  @ApiOperation({ summary: 'Request Video Chunk' })
+  @ApiParam({
+    name: 'videoname',
+    description: 'Name of the video to request',
+    required: true,
+  })
+  @ApiParam({
+    name: 'chunk',
+    description: 'Name of the video chunk to request',
+    required: true,
+  })
+  async requestVideostream(
+    @Param('videoname') videoname: string,
+    @Param('chunk') chunk: string,
   ) {
-    await this.videostreamService.encodeVideoStream(filename);
-  }
+    await valid(VideonameDto, { videoname });
+    await valid(VideoChunkDto, { chunk });
 
-  @Get('/video')
-  async requestManifest(@Query('manifest') manifest?: string) {
-    if (manifest === undefined) {
-      throw new BadRequestException('Manifest is required');
+    const filepath = join(videoname, chunk);
+
+    if (!FileUtil.isExist(filepath)) {
+      throw new BadRequestException('Video not found');
     }
-
-    const manifestFile = `${manifest}-manifest.mpd`;
-    const stream = await this.videostreamService.getVideoStream(manifestFile);
-    return new StreamableFile(stream, {
-      type: 'application/dash+xml',
-      disposition: `inline; filename="Manifest.mpd"`,
-    });
-  }
-
-  @Get(':chunk')
-  async requestChunk(@Param('chunk') chunk: string) {
-    if (chunk === undefined) {
-      throw new BadRequestException('Chunk is required');
-    }
-
-    const stat = await this.videostreamService.getVideoStat(chunk);
-
-    if (chunk.match('init-stream')) {
-      const stream = this.videostreamService.getVideoStream(chunk);
+    if (chunk.match('manifest.mpd')) {
+      const stream = await this.videostreamService.getVideoStream(filepath);
       return new StreamableFile(stream, {
-        length: stat.size,
+        type: 'application/dash+xml',
+        disposition: `inline; filename="Manifest.mpd"`,
       });
-    }
-    if (chunk.match('chunk-stream')) {
-      const stream = this.videostreamService.getVideoStream(chunk);
+    } else {
+      const stat = await this.videostreamService.getVideoStat(filepath);
+      const stream = this.videostreamService.getVideoStream(filepath);
       return new StreamableFile(stream, {
         length: stat.size,
       });

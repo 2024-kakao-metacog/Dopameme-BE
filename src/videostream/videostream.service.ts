@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ReadStream } from 'fs';
 import { join, resolve } from 'path';
-import { MyFileSystem } from '../library/file';
+import { FileUtil } from '../library/file';
 import { MpegDash } from '../library/mpegdash';
 
 @Injectable()
@@ -16,14 +16,14 @@ export class VideostreamService {
   }
 
   saveVideoStream(filename: string, stream: ReadStream) {
-    MyFileSystem.saveFileStream(join(this.outputDir, filename), stream);
+    FileUtil.saveFileStream(join(this.outputDir, filename), stream);
   }
 
   getVideoStream(filename: string): ReadStream {
-    return MyFileSystem.getFileStream(join(this.outputDir, filename));
+    return FileUtil.getFileStream(join(this.outputDir, filename));
   }
 
   getVideoStat(filename: string) {
-    return MyFileSystem.getFileStat(join(this.outputDir, filename));
+    return FileUtil.getFileStat(join(this.outputDir, filename));
   }
 }
