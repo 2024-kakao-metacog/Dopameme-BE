@@ -24,6 +24,7 @@ export class UserService {
         },
       });
       return {
+        id: user.id,
         userId: user.userId,
         passwordHash: '',
         nickname: user.nickname,
@@ -59,6 +60,7 @@ export class UserService {
       return null;
     }
     return {
+      id: user.id,
       userId: user.userId,
       passwordHash: '',
       nickname: user.nickname,
@@ -75,6 +77,7 @@ export class UserService {
       return null;
     }
     return {
+      id: user.id,
       userId: user.userId,
       passwordHash: '',
       nickname: user.nickname,
@@ -91,6 +94,7 @@ export class UserService {
       return null;
     }
     return {
+      id: user.id,
       userId: user.userId,
       passwordHash: '',
       nickname: user.nickname,
