@@ -2,16 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 
 class VideoMetadataListSnippet {
   @ApiProperty({
-    description: 'The unique identifier of the video',
-    example: 'abc123',
-  })
-  videoId: string;
-
-  @ApiProperty({
     description: 'The title of the video',
     example: 'Sample Video Title',
   })
   title: string;
+
+  @ApiProperty({
+    description: 'The unique identifier of the video',
+    example: 'example',
+  })
+  videoUrl: string;
 
   @ApiProperty({
     description: 'The thumbnail URL of the video',
