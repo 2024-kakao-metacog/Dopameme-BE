@@ -62,7 +62,7 @@ export class AuthService {
   }
 
   async refreshAccessToken(refreshToken: string) {
-    const payload = await this.decodeToken(refreshToken);
+    const payload = await this.verifyToken(refreshToken);
     const user = await this.userService.findUserByUserId(payload.userId);
 
     if (user === null) {
@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   async refreshRefreshToken(refreshToken: string) {
-    const payload = await this.decodeToken(refreshToken);
+    const payload = await this.verifyToken(refreshToken);
     const user = await this.userService.findUserByUserId(payload.userId);
 
     if (user === null) {
