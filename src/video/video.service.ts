@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { join, resolve } from 'path';
 import { FileUtil } from '../library/file';
-import { Video, VideoMock } from './entity/Video.entity';
+import { Video, VideoMock } from './entity/video.entity';
 import { DatabaseService } from '../database.service';
 
 @Injectable()
