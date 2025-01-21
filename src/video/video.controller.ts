@@ -1,17 +1,33 @@
-import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  NotFoundException,
+  Query,
+} from '@nestjs/common';
 import { VideoService } from './video.service';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FindVideoMetadataListDto } from './dto/find-video-metadata-list.dto';
-import { VideoMetadataListResponseDto } from './dto/video-metadata-list-response.dto';
+import {
+  FindVideoMetadataDto,
+  FindVideoMetadataListDto,
+} from './dto/find-video-metadata.dto';
+import {
+  VideoMetadataListResponseDto,
+  VideoMetadataResponseDto,
+} from './dto/video-metadata-response.dto';
 import { valid } from '../library/class-validate';
+import { UserService } from '../user/user.service';
 
 @ApiTags('Video')
 @Controller('video')
 export class VideoController {
-  constructor(private readonly videoService: VideoService) {}
+  constructor(
+    private readonly videoService: VideoService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get('/metadata/list')
-  @ApiOperation({ summary: 'Retrieve Video Metadata' })
+  @ApiOperation({ summary: 'Retrieve Random Video Metadata List' })
   @ApiQuery({
     name: 'maxResults',
     required: false,
@@ -28,11 +44,82 @@ export class VideoController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Bad request format.',
   })
-  async getVideoMetadatas(
+  async getVideoMetadataListRandom(
     @Query('maxResults')
     maxResults: number = 4,
-  ) {
+  ): Promise<VideoMetadataListResponseDto> {
     await valid(FindVideoMetadataListDto, { maxResults });
-    return this.videoService.getVideoMetadatasDummy(maxResults);
+    const metadataList =
+      await this.videoService.getVideoMetadataListRandom(maxResults);
+
+    // To Do: Implement auth user check
+
+    const snippet = await Promise.all(
+      metadataList.map(async (metadata) => {
+        const user = await this.userService.findUserById(metadata.userId);
+
+        return {
+          title: metadata.title,
+          videoUrl: metadata.videoUrl,
+          thumbnailUrl: metadata.thumbnailUrl,
+          publishedAt: metadata.publishedAt,
+          userId: user.userId,
+          userNickname: user.nickname,
+          isOwner: false,
+          isSubscribed: false,
+          canSubscribe: false,
+        };
+      }),
+    );
+
+    return {
+      snippet: snippet,
+    };
+  }
+
+  @Get('/metadata')
+  @ApiOperation({ summary: 'Retrieve Video Metadata' })
+  @ApiQuery({
+    name: 'videoUrl',
+    required: true,
+    description: 'The unique identifier of the video',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully returned video metadata',
+    type: VideoMetadataResponseDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request format.',
+  })
+  async getVideoMetadata(
+    @Query('videoUrl')
+    videoUrl: string,
+  ): Promise<VideoMetadataResponseDto> {
+    await valid(FindVideoMetadataDto, { videoUrl });
+    const metadata = await this.videoService.findVideoByVideoUrl(videoUrl);
+
+    if (metadata === null) {
+      throw new NotFoundException('Video not found');
+    }
+
+    const user = await this.userService.findUserById(metadata.userId);
+
+    // To Do: Implement auth user check
+
+    return {
+      snippet: {
+        title: metadata.title,
+        videoUrl: metadata.videoUrl,
+        thumbnailUrl: metadata.thumbnailUrl,
+        publishedAt: metadata.publishedAt,
+        userId: user.userId,
+        userNickname: user.nickname,
+        isOwner: false,
+        isSubscribed: false,
+        canSubscribe: false,
+      },
+    };
   }
 }

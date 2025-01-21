@@ -81,4 +81,20 @@ export class UserService {
       createdAt: user.createdAt,
     };
   }
+
+  async findUserById(id: number): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (user === null) {
+      return null;
+    }
+    return {
+      userId: user.userId,
+      passwordHash: '',
+      nickname: user.nickname,
+      createdAt: user.createdAt,
+    };
+  }
 }
