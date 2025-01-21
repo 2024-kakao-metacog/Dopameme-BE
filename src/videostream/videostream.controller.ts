@@ -10,7 +10,6 @@ import { ApiOperation, ApiParam } from '@nestjs/swagger';
 import { join } from 'path';
 import { valid } from '../library/class-validate';
 import { VideoChunkDto, VideonameDto } from './dto/request-video.dto';
-import { FileUtil } from '../library/file';
 
 @Controller('videostream')
 export class VideostreamController {
@@ -47,7 +46,7 @@ export class VideostreamController {
 
     const filepath = join(videoname, chunk);
 
-    if (!FileUtil.isExist(filepath)) {
+    if (!this.videostreamService.isExistVideoChunk(filepath)) {
       throw new BadRequestException('Video not found');
     }
     if (chunk.match('manifest.mpd')) {
