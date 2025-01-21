@@ -79,8 +79,8 @@ export class AuthController {
   }
 
   @Put()
-  @UseGuards(JwtAccessTokenGuard)
-  @UseGuards(JwtRefreshTokenGuard)
+  // @UseGuards(JwtAccessTokenGuard)
+  // @UseGuards(JwtRefreshTokenGuard)
   @ApiOperation({ summary: 'Refresh Authentication Token' })
   @HttpCode(HttpStatus.OK)
   @ApiBody({
