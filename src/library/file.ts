@@ -1,23 +1,25 @@
-import { createReadStream, createWriteStream, stat, readFileSync } from 'fs';
-import { resolve } from 'path';
+import {
+  createReadStream,
+  createWriteStream,
+  stat,
+  readFileSync,
+  existsSync,
+} from 'fs';
 import { promisify } from 'util';
 
 const statAsync = promisify(stat);
 
-export class MyFileSystem {
+export class FileUtil {
   static getFileStream(filePath: string) {
     return createReadStream(filePath);
   }
 
-  // To Do: Remove Dependency on process.cwd()
   static async getFileStat(fileName: string) {
-    return statAsync(resolve(process.cwd(), fileName));
+    return statAsync(fileName);
   }
 
-  // To Do: Remove Dependency on process.cwd()
   static saveFileStream(fileName: string, stream: NodeJS.ReadableStream) {
-    const filePath = resolve(process.cwd(), fileName);
-    const writable = createWriteStream(filePath);
+    const writable = createWriteStream(fileName);
 
     return new Promise<void>((resolve, reject) => {
       stream.pipe(writable);
@@ -33,5 +35,9 @@ export class MyFileSystem {
 
   static readFile(filePath: string) {
     return readFileSync(filePath);
+  }
+
+  static isExist(filePath: string) {
+    return existsSync(filePath);
   }
 }
