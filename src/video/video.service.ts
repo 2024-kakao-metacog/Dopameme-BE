@@ -109,4 +109,21 @@ export class VideoService {
       publishedAt: video.publishedAt,
     };
   }
+
+  async findVideoByUserId(userId: number): Promise<Video[]> {
+    const videos = await this.prisma.video.findMany({
+      where: { userId },
+    });
+
+    return videos.map((video) => {
+      return {
+        userId: video.userId,
+        title: video.title,
+        videoUrl: video.videoUrl,
+        thumbnailUrl: video.thumbnailUrl,
+        isCrawl: video.isCrawl,
+        publishedAt: video.publishedAt,
+      };
+    });
+  }
 }
