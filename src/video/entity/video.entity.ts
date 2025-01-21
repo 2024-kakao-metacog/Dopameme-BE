@@ -1,5 +1,5 @@
 export class Video {
-  userId: string;
+  userId: number;
   title: string;
   videoUrl: string;
   thumbnailUrl: string;

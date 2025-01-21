@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-class VideoMetadataListSnippet {
+class VideoMetadataSnippet {
   @ApiProperty({
     description: 'The title of the video',
     example: 'Sample Video Title',
@@ -9,13 +9,13 @@ class VideoMetadataListSnippet {
 
   @ApiProperty({
     description: 'The unique identifier of the video',
-    example: 'example',
+    example: 'Sample Video',
   })
   videoUrl: string;
 
   @ApiProperty({
     description: 'The thumbnail URL of the video',
-    example: 'https://example.com/thumbnail.jpg',
+    example: 'https://example.com/Samplethumbnail.jpg',
   })
   thumbnailUrl: string;
 
@@ -23,7 +23,7 @@ class VideoMetadataListSnippet {
     description: 'The date when the video was published',
     example: '2023-01-01T00:00:00Z',
   })
-  publishedAt: string;
+  publishedAt: Date;
 
   @ApiProperty({
     description: 'The unique identifier of the user who uploaded the video',
@@ -60,7 +60,16 @@ export class VideoMetadataListResponseDto {
   @ApiProperty({
     name: 'snippets',
     description: 'List of video metadata',
-    type: [VideoMetadataListSnippet],
+    type: [VideoMetadataSnippet],
   })
-  snippets: VideoMetadataListSnippet[];
+  snippet: VideoMetadataSnippet[];
+}
+
+export class VideoMetadataResponseDto {
+  @ApiProperty({
+    name: 'snippet',
+    description: 'Video metadata',
+    type: VideoMetadataSnippet,
+  })
+  snippet: VideoMetadataSnippet;
 }
