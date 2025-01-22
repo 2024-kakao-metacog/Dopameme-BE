@@ -6,6 +6,7 @@ import { UserService } from '../user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthStrategy } from './strategy/jwt-auth.strategy';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy';
 
 @Module({
   imports: [JwtModule.register({ global: true })],
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
     DatabaseService,
     JwtAuthStrategy,
     JwtAuthGuard,
+    JwtRefreshStrategy,
   ],
   exports: [JwtAuthGuard],
 })
