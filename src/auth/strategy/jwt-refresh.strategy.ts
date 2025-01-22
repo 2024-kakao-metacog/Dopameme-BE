@@ -1,20 +1,20 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { RefreshTokenPayload } from '../entities/refresh-token-payload.entity';
-import { AuthService } from '../auth.service';
 import { JwtConfig } from '../../config/jwt.config';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
-export class JwtRefreshTokenStrategy extends PassportStrategy(
+export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
   'refresh_token',
 ) {
   constructor(
     private readonly configService: ConfigService,
-    private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {
     const jwtConfig = configService.get<JwtConfig>('jwt');
 
@@ -31,24 +31,13 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
   }
 
   async validate(req: Request, payload: RefreshTokenPayload) {
-    console.log('Refresh Token Strategy:', payload);
+    const user = await this.userService.findUserByUserId(payload.userId);
 
-    const refreshToken = req?.cookies?.refresh_token;
-
-    if (!refreshToken) {
-      throw new UnauthorizedException('refresh token is undefined');
+    if (user === null) {
+      return null;
     }
 
-    // const result = await this.authService.compareUserRefreshToken(
-    //   payload.userId,
-    //   refreshToken,
-    // );
-    // if (!result) {
-    //   throw new UnauthorizedException('refresh token is wrong');
-    // }
-
-    req.user = payload;
-
-    return payload;
+    // TODO: payload 넘기는 것으로 수정 필요(security)
+    return user;
   }
 }
