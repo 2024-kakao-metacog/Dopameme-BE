@@ -27,7 +27,7 @@ export class VideoController {
     private readonly userService: UserService,
   ) {}
 
-  @Get('/metadata/list')
+  @Get('/metadatas')
   @ApiOperation({ summary: 'Retrieve User Video Metadata List' })
   @ApiQuery({
     name: 'userId',
@@ -77,7 +77,7 @@ export class VideoController {
     };
   }
 
-  @Get('/metadata/list/random')
+  @Get('/metadatas/random')
   @ApiOperation({ summary: 'Retrieve Random Video Metadata List' })
   @ApiQuery({
     name: 'maxResults',
