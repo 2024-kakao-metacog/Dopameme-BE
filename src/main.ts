@@ -25,6 +25,7 @@ async function bootstrap() {
     origin: corsConfig.origin,
     methods: corsConfig.methods,
     allowedHeaders: corsConfig.allowedHeaders,
+    exposedHeaders: corsConfig.exposedHeaders,
     credentials: corsConfig.credentials,
   });
 
