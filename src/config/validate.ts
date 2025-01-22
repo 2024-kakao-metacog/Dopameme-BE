@@ -46,6 +46,9 @@ class EnvironmentVariables {
   CORS_ALLOWED_HEADERS: string;
 
   @IsString()
+  CORS_EXPOSED_HEADERS: string;
+
+  @IsString()
   CORS_CREDENTIALS: string;
 
   // JWT Config
