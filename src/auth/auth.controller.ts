@@ -8,7 +8,6 @@ import {
   Put,
   Res,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -19,8 +18,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { LoginUserDto } from '../user/dto/login-user.dto';
-import { JwtAccessTokenGuard } from './guard/access-token.guard';
-import { JwtRefreshTokenGuard } from './guard/refresh-token.guard';
 import { Cookies } from './decorator/cookies.decorator';
 import { Response } from 'express';
 
@@ -28,14 +25,6 @@ import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  // @Get()
-  // @ApiOperation({ summary: 'Debug Authentication Tokens' })
-  // async debugTokens(@Req() req: Request) {
-  //   const cookies = req.get('cookie');
-  //   const accessToken = getCookieValue(cookies, 'access_token');
-  //   const refreshToken = getCookieValue(cookies, 'refresh_token');
-  // }
 
   @Post()
   @ApiOperation({ summary: 'Authenticate User' })
@@ -79,8 +68,6 @@ export class AuthController {
   }
 
   @Put()
-  // @UseGuards(JwtAccessTokenGuard)
-  // @UseGuards(JwtRefreshTokenGuard)
   @ApiOperation({ summary: 'Refresh Authentication Token' })
   @HttpCode(HttpStatus.OK)
   @ApiBody({
@@ -114,7 +101,5 @@ export class AuthController {
 
   // To Do
   @Delete()
-  @UseGuards(JwtAccessTokenGuard)
-  @UseGuards(JwtRefreshTokenGuard)
   async signOut() {}
 }
