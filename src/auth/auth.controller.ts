@@ -8,6 +8,7 @@ import {
   Put,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -20,6 +21,7 @@ import {
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import { Cookies } from './decorator/cookies.decorator';
 import { Response } from 'express';
+import { JwtRefreshGuard } from './guard/jwt-refresh.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -63,6 +65,7 @@ export class AuthController {
   }
 
   @Put()
+  @UseGuards(JwtRefreshGuard)
   @ApiOperation({ summary: 'Refresh Authentication Token' })
   @HttpCode(HttpStatus.OK)
   @ApiBody({
