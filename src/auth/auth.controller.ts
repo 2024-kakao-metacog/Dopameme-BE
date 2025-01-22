@@ -56,11 +56,6 @@ export class AuthController {
 
     res.setHeader('Authorization', 'Bearer ' + accessToken);
 
-    res.cookie('access_token', accessToken, {
-      httpOnly: true,
-      secure: false, // Set to true in production
-    });
-
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       secure: false, // Set to true in production
@@ -88,14 +83,11 @@ export class AuthController {
       throw new UnauthorizedException('Invalid User');
     }
 
-    res.cookie('access_token', newAccessToken, {
-      httpOnly: true,
-      secure: true,
-    });
+    res.setHeader('Authorization', 'Bearer ' + newAccessToken);
 
     res.cookie('refresh_token', newRefreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
     });
   }
 
