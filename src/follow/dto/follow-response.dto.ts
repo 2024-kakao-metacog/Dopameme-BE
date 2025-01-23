@@ -8,17 +8,16 @@ class FollowsSnippet {
   id: number;
 
   @ApiProperty({
-    description:
-      'The unique identifier of the user who is following another user',
-    example: 10,
+    description: 'The unique identifier of the user who is being followed',
+    example: 'johndoe',
   })
-  fromUserId: number;
+  followedUserId: string;
 
   @ApiProperty({
-    description: 'The unique identifier of the user who is being followed',
-    example: 20,
+    description: 'The nickname of the user who is being followed',
+    example: 'John Doe',
   })
-  toUserId: number;
+  followedNickname: string;
 
   @ApiProperty({
     description: 'The date when the follow was created',

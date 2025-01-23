@@ -8,6 +8,7 @@ import {
   Query,
   ConflictException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { FollowService } from './follow.service';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
@@ -18,6 +19,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import {
   FollowResponseDto,
@@ -36,6 +38,7 @@ export class FollowController {
     description: 'Successfully retrieved following list',
     type: FollowsResponseDto,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async getFollowings(@Req() req: any): Promise<FollowsResponseDto> {
     const fromUserId = req.user;
     const followings =
@@ -44,8 +47,8 @@ export class FollowController {
     return {
       snippet: followings.map((follower) => ({
         id: follower.id,
-        fromUserId: follower.followingUserId,
-        toUserId: follower.followedUserId,
+        followedUserId: follower.followedUserId,
+        followedNickname: follower.followedNickname,
         createdAt: follower.createdAt,
       })),
     };
@@ -59,21 +62,22 @@ export class FollowController {
     description: 'Successfully followed',
     type: FollowsResponseDto,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiConflictResponse({ description: 'Already following' })
   async followUser(
     @Req() req: any,
-    @Query('followerId') toUserId: number,
+    @Query('userId') userId: string,
   ): Promise<FollowResponseDto> {
     const fromUserId = req.user;
 
     try {
       return {
         snippet: await this.followService
-          .createFollow(fromUserId, toUserId)
+          .createFollow(fromUserId, userId)
           .then((follow) => ({
             id: follow.id,
-            fromUserId: follow.followingUserId,
-            toUserId: follow.followedUserId,
+            followedUserId: follow.followedUserId,
+            followedNickname: follow.followedNickname,
             createdAt: follow.createdAt,
           })),
       };
@@ -86,17 +90,24 @@ export class FollowController {
   @ApiOperation({ summary: 'Unfollow User' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access_token')
+  @ApiOkResponse({ description: 'Successfully unfollowed' })
   @ApiNotFoundResponse({ description: 'Not following user' })
-  async unfollowUser(@Req() req: any, @Query('followerId') toUserId: number) {
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  async unfollowUser(@Req() req: any, @Query('followId') followId: number) {
     const fromUserId = req.user;
 
     try {
-      await this.followService.removeFollowingByFromUserIdAndToUserId(
+      await this.followService.removeFollowingByUserIdAndId(
         fromUserId,
-        toUserId,
+        followId,
       );
     } catch (err) {
-      throw new NotFoundException(err.message);
+      if (err.message === 'Not following user') {
+        throw new NotFoundException(err.message);
+      }
+      if (err.message === 'Unauthorized') {
+        throw new UnauthorizedException(err.message);
+      }
     }
   }
 }
