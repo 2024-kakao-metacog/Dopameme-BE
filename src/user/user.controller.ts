@@ -57,6 +57,7 @@ export class UserController {
 
       return {
         snippet: {
+          id: newUser.id,
           userId: newUser.userId,
           nickname: newUser.nickname,
           createdAt: newUser.createdAt,
@@ -76,7 +77,7 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Retrieve User Details' })
   @ApiQuery({
-    name: 'id',
+    name: 'userId',
     description: 'The unique identifier of the user',
     type: String,
     required: true,
@@ -90,7 +91,7 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid user ID',
   })
-  async getUser(@Query('id') userId: string): Promise<UserResponseDto> {
+  async getUser(@Query('userId') userId: string): Promise<UserResponseDto> {
     await valid(FindUserDto, { userId });
 
     const user = await this.userService.findUserByUserId(userId);
@@ -99,6 +100,7 @@ export class UserController {
     }
     return {
       snippet: {
+        id: user.id,
         userId: user.userId,
         nickname: user.nickname,
         createdAt: user.createdAt,

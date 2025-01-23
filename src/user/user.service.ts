@@ -34,10 +34,8 @@ export class UserService {
       if (error instanceof PrismaClientKnownRequestError) {
         switch (error.code) {
           case PrismaErrorCode.UniqueConstraintFailed:
-            if (error.code === PrismaErrorCode.UniqueConstraintFailed) {
-              const targetField = error.meta.target[0];
-              throw new Error(`Duplicate field: ${targetField}`);
-            }
+            const targetField = error.meta.target[0];
+            throw new Error(`Duplicate field: ${targetField}`);
           default:
             throw new Error('An unknown error occurred');
         }

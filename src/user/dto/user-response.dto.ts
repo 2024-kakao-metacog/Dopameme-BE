@@ -3,7 +3,13 @@ import { ApiProperty } from '@nestjs/swagger';
 class UserResponseSnippet {
   @ApiProperty({
     description: 'The unique identifier of the user',
-    example: '123',
+    example: '10',
+  })
+  id: number;
+
+  @ApiProperty({
+    description: 'The unique identifier of the user',
+    example: 'abc123',
   })
   userId: string;
 
