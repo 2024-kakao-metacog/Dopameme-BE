@@ -12,6 +12,7 @@ import { VideoModule } from './video/video.module';
 import { VideoStreamModule } from './videostream/videostream.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { FollowModule } from './follow/follow.module';
 import jwtConfig from './config/jwt.config';
 
 // __dirname is src/
@@ -34,6 +35,7 @@ const envFilePath = resolve(
     VideoStreamModule,
     AuthModule,
     UserModule,
+    FollowModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseService],
