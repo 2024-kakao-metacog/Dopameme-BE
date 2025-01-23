@@ -1,6 +1,6 @@
 export class Follow {
   id: number;
-  followingUserId: number; // from
-  followedUserId: number; // to
+  followedUserId: string;
+  followedNickname: string;
   createdAt: Date;
 }
