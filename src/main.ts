@@ -37,6 +37,15 @@ async function bootstrap() {
     .setTitle('Dopameme API Docs')
     .setDescription('Video Platform API Docs')
     .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'JWT',
+        in: 'header',
+      },
+      'access_token',
+    )
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
