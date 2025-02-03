@@ -5,8 +5,9 @@ import { DatabaseService } from '../database.service';
 import { UserService } from '../user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthStrategy } from './strategy/jwt-auth.strategy';
-import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { AccessTokenGuard } from './guard/access-token.guard';
 import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy';
+import { RefreshTokenGuard } from './guard/refresh-token.guard';
 
 @Module({
   imports: [JwtModule.register({ global: true })],
@@ -16,9 +17,10 @@ import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy';
     UserService,
     DatabaseService,
     JwtAuthStrategy,
-    JwtAuthGuard,
+    AccessTokenGuard,
     JwtRefreshStrategy,
+    RefreshTokenGuard,
   ],
-  exports: [JwtAuthGuard],
+  exports: [AccessTokenGuard],
 })
 export class AuthModule {}
