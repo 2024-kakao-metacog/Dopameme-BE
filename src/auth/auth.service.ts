@@ -31,6 +31,15 @@ export class AuthService {
     return await this.userService.findUserByUserIdAndUserPw(userId, password);
   }
 
+  async createAuthTokens(
+    user: User,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const accessToken = await this.createAccessToken(user);
+    const refreshToken = await this.createRefreshToken(user);
+
+    return { accessToken, refreshToken };
+  }
+
   async createAccessToken(user: User): Promise<string> {
     const payload = {
       userId: user.userId,
