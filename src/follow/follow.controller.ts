@@ -11,7 +11,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { FollowService } from './follow.service';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { AccessTokenGuard } from '../auth/guard/access-token.guard';
+import { RefreshTokenGuard } from '../auth/guard/refresh-token.guard';
 import {
   ApiBearerAuth,
   ApiConflictResponse,
@@ -25,6 +26,7 @@ import {
   FollowResponseDto,
   FollowsResponseDto,
 } from './dto/follow-response.dto';
+import { User } from '../user/entities/user.entity';
 
 @Controller('follow')
 export class FollowController {
@@ -32,7 +34,7 @@ export class FollowController {
 
   @Get('followings')
   @ApiOperation({ summary: "Retrieve User's Following List" })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AccessTokenGuard, RefreshTokenGuard)
   @ApiBearerAuth('access_token')
   @ApiOkResponse({
     description: 'Successfully retrieved following list',
@@ -40,9 +42,11 @@ export class FollowController {
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async getFollowings(@Req() req: any): Promise<FollowsResponseDto> {
-    const fromUserId = req.user;
-    const followings =
-      await this.followService.findFollowingsByUserId(fromUserId);
+    const fromUser = req.user as User;
+
+    const followings = await this.followService.findFollowingsByUserId(
+      fromUser.id,
+    );
 
     return {
       snippet: followings.map((follower) => ({
@@ -56,7 +60,7 @@ export class FollowController {
 
   @Post()
   @ApiOperation({ summary: 'Follow User' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AccessTokenGuard, RefreshTokenGuard)
   @ApiBearerAuth('access_token')
   @ApiCreatedResponse({
     description: 'Successfully followed',
@@ -68,12 +72,12 @@ export class FollowController {
     @Req() req: any,
     @Query('userId') userId: string,
   ): Promise<FollowResponseDto> {
-    const fromUserId = req.user;
+    const fromUser = req.user as User;
 
     try {
       return {
         snippet: await this.followService
-          .createFollow(fromUserId, userId)
+          .createFollow(fromUser.id, userId)
           .then((follow) => ({
             id: follow.id,
             followedUserId: follow.followedUserId,
@@ -88,17 +92,17 @@ export class FollowController {
 
   @Delete()
   @ApiOperation({ summary: 'Unfollow User' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AccessTokenGuard, RefreshTokenGuard)
   @ApiBearerAuth('access_token')
   @ApiOkResponse({ description: 'Successfully unfollowed' })
   @ApiNotFoundResponse({ description: 'Not following user' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async unfollowUser(@Req() req: any, @Query('followId') followId: number) {
-    const fromUserId = req.user;
+    const fromUser = req.user as User;
 
     try {
       await this.followService.removeFollowingByUserIdAndId(
-        fromUserId,
+        fromUser.id,
         followId,
       );
     } catch (err) {
