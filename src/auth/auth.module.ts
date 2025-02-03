@@ -21,6 +21,6 @@ import { RefreshTokenGuard } from './guard/refresh-token.guard';
     JwtRefreshStrategy,
     RefreshTokenGuard,
   ],
-  exports: [AccessTokenGuard],
+  exports: [AccessTokenGuard, RefreshTokenGuard],
 })
 export class AuthModule {}
